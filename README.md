@@ -1,4 +1,7 @@
-# LeetCode-PS
-LeetCode Push 연동
+# Problem Solving Problems
+해결한 PS 문제 저장소입니다.
 
-## LeetHub V2 크롬 플러그인을 사용하여 자동 Push 연동을 해둠.
+
+### 백준, 프로그래머스, LeetCode, 구름
+
+
