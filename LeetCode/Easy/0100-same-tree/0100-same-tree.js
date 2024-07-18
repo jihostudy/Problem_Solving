@@ -9,12 +9,10 @@ var isSameTree = function (p, q) {
     return false;
   }
   // #3. Check left and right validation
-  else {
-    // 최적화 방법
+  else {    
     if (!isSameTree(p.left, q.left)) {
       return false;
     }
-    return isSameTree(p.right, q.right);
-    // return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    return isSameTree(p.right, q.right);    
   }
 };
