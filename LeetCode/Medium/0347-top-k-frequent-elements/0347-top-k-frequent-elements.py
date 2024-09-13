@@ -1,4 +1,3 @@
-# Top K Frequent Elements
 class Solution(object):
     def topKFrequent(self, nums, k):
         """
@@ -16,11 +15,10 @@ class Solution(object):
         for key,value in set.items():
             carr.append([key,value])
         carr.sort(reverse=True, key=lambda x: x[1])
+        
         answer = []
         cnt = 0
-        for arr in carr:
-            answer.append(arr[0])
+        while(cnt < k):
+            answer.append(carr[cnt][0])
             cnt += 1
-            if(cnt  == k):
-                break
         return answer
