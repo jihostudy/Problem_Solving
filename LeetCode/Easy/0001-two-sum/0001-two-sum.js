@@ -5,27 +5,23 @@
  */
 var twoSum = function (nums, target) {
   const len = nums.length;
-  let left = 0;
-  let right = len - 1;
-  // #1. 정렬
-  const arr = nums.toSorted((a, b) => a - b);
-  while (left <= right) {
-    const sum = arr[left] + arr[right];
-    if (sum < target) {
-      left += 1;
-    } else if (sum > target) {
+  let [left, right] = [0, len - 1];
+
+  // #0. 정렬
+  const sortedNums = nums.toSorted((a, b) => a - b);
+  // #1. 순회
+  while (true) {
+    const add = sortedNums[left] + sortedNums[right];
+    if (add === target) {
+      const leftIndex = nums.findIndex((val) => val === sortedNums[left]);
+      const rightIndex = nums.findIndex(
+        (val, idx) => val === sortedNums[right] && idx !== leftIndex
+      );
+      return [leftIndex, rightIndex];
+    } else if (add > target) {
       right -= 1;
     } else {
-      // #2. 위치 찾기
-      let result = [];
-
-      nums.forEach((num, index) => {
-        if (num === arr[left] || num === arr[right]) {
-          result.push(index);
-        }
-      });
-
-      return result;
+      left += 1;
     }
   }
 };
