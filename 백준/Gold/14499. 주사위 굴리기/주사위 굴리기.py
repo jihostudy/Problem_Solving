@@ -1,93 +1,96 @@
-import copy
-def arrange(arr, inst, row,col, N, M) :
-    newArr = [0,0,0,0,0,0]
-    # 동
-    if(inst == 1):
+N, M, x, y, K = list(map(int, input().split()))
 
-        newArr[0] = arr[3]
-        newArr[1] = arr[1]
-        newArr[2] = arr[2]
-        newArr[3] = arr[4]
-        newArr[4] = arr[5]
-        newArr[5] = arr[0]
-    # 서
-    elif (inst == 2):
+def command_movement(command): # 주사위를 이동시키는 값 반환
+    movex, movey = None, None
+    if(command == 1):#동
+        movex, movey = 0, 1
+    elif (command == 2):#서
+        movex, movey = 0, -1
+    elif (command == 3):#북
+        movex, movey = -1, 0
+    elif (command == 4):#남
+        movex, movey = 1, 0
+    return movex,movey
+def move_dice(command, dice_position):
+    current_dice_position = dice_position
+    if (command == 1):  # 동
+        return { #주사위의 형태
+            "right": current_dice_position["top"],
+            "left": current_dice_position["bottom"],
+            "front": current_dice_position["front"], # 동일
+            "back": current_dice_position["back"], #동일
+            "top": current_dice_position["left"],
+            "bottom": current_dice_position["right"]
+        }
+    elif (command == 2):  # 서
+        return {  # 주사위의 형태
+            "right": current_dice_position["bottom"],
+            "left": current_dice_position["top"],
+            "front": current_dice_position["front"],  # 동일
+            "back": current_dice_position["back"],  # 동일
+            "top": current_dice_position["right"],
+            "bottom": current_dice_position["left"]
+        }
+    elif (command == 3):  # 북
+        return {  # 주사위의 형태
+            "right": current_dice_position["right"], # 동일
+            "left": current_dice_position["left"], # 동일
+            "front": current_dice_position["bottom"],
+            "back": current_dice_position["top"],
+            "top": current_dice_position["front"],
+            "bottom": current_dice_position["back"]
+        }
+    elif (command == 4):  # 남
+        return {  # 주사위의 형태
+            "right": current_dice_position["right"], # 동일
+            "left": current_dice_position["left"], # 동일
+            "front": current_dice_position["top"],
+            "back": current_dice_position["bottom"],
+            "top": current_dice_position["back"],
+            "bottom": current_dice_position["front"]
+        }
 
-        # print("2: 서")
-        newArr[0] = arr[5]
-        newArr[1] = arr[1]
-        newArr[2] = arr[2]
-        newArr[3] = arr[0]
-        newArr[4] = arr[3]
-        newArr[5] = arr[4]
-    # 북
-    elif (inst == 3):
-
-        newArr[0] = arr[1]
-        newArr[1] = arr[4]
-        newArr[2] = arr[0]
-        newArr[3] = arr[3]
-        newArr[4] = arr[2]
-        newArr[5] = arr[5]
-        # print("3: 북")
-
-    # 남
-    elif (inst == 4):
-
-        # print("4: 남")
-        newArr[0] = arr[2]
-        newArr[1] = arr[0]
-        newArr[2] = arr[4]
-        newArr[3] = arr[3]
-        newArr[4] = arr[1]
-        newArr[5] = arr[5]
-    return newArr
-
-#
-# 2 2 1 1 1
-# 2 2
-# 2 0
-
-
-N, M, x, y, K = map(int, input().split())
-# N: 세로길이, M: 가로길이, x, y: 좌표, K: 실행횟수
-
-arr = [[0 for _ in range(M)] for _ in range(N)]
-
+#1. 보드판 입력 받기
+arr = [[0] * M for _ in range(N)]
 for i in range(N):
-    il = list(map(int, input().split()))
-    for j in range(M):
-        arr[i][j] = il[j]
+    rowList = list(map(int,input().split()))
+    arr[i] = rowList
 
-instArr = list(map(int, input().split()))
+#2. 명령들
+commands = list(map(int, input().split()))
 
-#-------------------------------------------------------------
-dr = [0, 0, 0, -1, 1]
-dc = [0, 1, -1, 0, 0]
-dice = [0 for _ in range(6)]
-# dice = [1,2,3,4,5,6]
-for inst in instArr:
-    nx = x + dr[inst]
-    ny = y + dc[inst]
+#3. 주사위 값
+dice = { # 주사위의 위치별 값
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0,
+    6:0
+}
+position = { #주사위의 형태
+    "right": 3,
+    "left": 4,
+    "front": 2,
+    "back": 5,
+    "top": 1,
+    "bottom": 6
+}
 
-    if not 0 <= nx < N or not 0 <= ny < M:
-        continue
-    else:
-        newArr = arrange(dice, inst, x, y, N, M)
-        dice = newArr.copy()
-        # 좌표에 따른 위치 : [y][x]
-        val = arr[nx][ny]
-        if(val == 0):
-            # 지도에 주사위[0] 값 복사
-            arr[nx][ny] = dice[0]
-
-        else :
-            dice[0] = arr[nx][ny]
-            arr[nx][ny] = 0
-        x = nx
-        y = ny
-        if(i == K-1):
-            print(dice[4], end="")
+#4. 명령별로 실행
+for command in commands:
+    # print("checking command {}".format(command))
+    mx, my = command_movement(command) #이동할 거리
+    if(0 <= x + mx <= N-1 and 0 <= y + my <= M-1):
+        x, y = x+mx, y+my # 주사위 좌표이동
+        position = move_dice(command,position) # 주사위 위치이동
+        # print("after moving dice positon is {}".format(position))
+        # Case1: 보드칸이 0인 경우
+        if(arr[x][y] == 0):
+            arr[x][y] = dice[position["bottom"]] #주사위 칸을 판에 복사
+        # Case2: 보드칸이 0이 아닌 경우
         else:
-            print(dice[4])
-            
+            dice[position["bottom"]] = arr[x][y] #칸에 쓰여있는 수가 주사위 바닥면으로 복사
+            arr[x][y] = 0 #칸에 쓰여있는 수 = 0
+        # 출력: 윗면 값
+        print(dice[position["top"]])
