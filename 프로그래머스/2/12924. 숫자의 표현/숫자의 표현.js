@@ -1,11 +1,14 @@
 function solution(n) {
-  let ans = 0;
-
-    for (let k = 1; k * (k + 1) / 2 <= n; k++) {
-        // 연속된 수열의 시작점이 자연수인지 확인
-        if ((n - (k * (k + 1)) / 2) % k === 0) {
-            ans += 1;
-        }
+  var answer = 0;
+  let right = 1;
+  let sum = 1;
+  for (let left = 1; left <= n; left++) {
+    while (sum < n) {
+      right++;
+      sum += right;
     }
-    return ans;
+    if (sum === n) answer += 1;
+    sum -= left;
+  }
+  return answer;
 }
