@@ -1,10 +1,5 @@
 from copy import deepcopy
 
-def print_board(board):
-    N = len(board)
-    for row in range(N):
-        print(*board[row])
-
 # 주어진 2차원 배열의 row,col로 시작하는 지점에서 시작하는 방향들에 대해 # 마킹하기
 # 리턴값 : 마킹한 # 개수
 def mark_available_return_marked(board,N,M,row,col,checkDirections):
@@ -76,7 +71,6 @@ def get_markedValue(board,N,M,accumulate):
         elif (cctvType == 5):
             checkDirections =[0,1,2,3]
 
-        # print("checkDirections",checkDirections)
         # 해당 지점의 방향들에 대해 # 마킹하기
         totalCount += mark_available_return_marked(newBoard,N,M,row,col,checkDirections)
     # 개수
@@ -101,21 +95,15 @@ for row in range(N):
 
 cctvCount = len(cctv)
 
-# print("available: {}".format(available))
-# print("cctv: {}".format(cctv))
 #2. 재귀를 하며, 나오는 결과에 대해 최소 사각지대 구하기
 minValue = float('inf')
 def recursive(count, accumulate):
-    # print("count: {}, accumulate: {}".format(count, accumulate))
     #1. 종료 조건
     if(count == cctvCount):
-        # print("Entered 종료조건")
-        # print("마킹한 개수: {}".format(get_markedValue(board,N,M,accumulate)))
         result = available - get_markedValue(board,N,M,accumulate)
 
         global minValue
         minValue = min(minValue,result)
-        # print("종료이후 최소값: {}".format(minValue))
         return
 
 
