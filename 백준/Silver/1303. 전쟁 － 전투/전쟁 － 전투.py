@@ -1,14 +1,9 @@
 from collections import deque
 
-def print_board(board):
-    for arr in board:
-        print(*arr)
-
 dr = [0,1,0,-1]
 dc = [1,0,-1,0]
 
 def BFS(board, row, col, M, N, visited):
-
     queue = deque()
     queue.append([row,col])
     visited[row][col] = True
@@ -34,13 +29,10 @@ board = []
 for i in range(M):
     board.append(list(input()))
 
-# print_board(board)
 # BFS
 teamWhite = 0  # W
 teamBlack = 0  # B
 visited = [[False for _ in range(N)] for _ in range(M)]
-
-# print_board(visited)
 
 for row in range(M):
     for col in range(N):
@@ -48,11 +40,8 @@ for row in range(M):
             add = BFS(board, row, col, M, N, visited)
             if(board[row][col] == 'W'):
                 teamWhite += add
-                # teamWhite += BFS(board, row, col, M, N, visited)
-                # print("adding team white: {}".format(add))
             elif(board[row][col] == 'B'):
                 teamBlack += add
-                # print("adding team black: {}".format(add))
 
 
 print(teamWhite, teamBlack)
