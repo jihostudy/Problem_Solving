@@ -27,14 +27,14 @@ const values = inputs[1].split("");
  */
 const R = 31;
 dp = new Array(L).fill(1);
+const MOD = 1234567891;
 for (let i = 1; i < L; i++) {
-  dp[i] = dp[i - 1] * R;
+  dp[i] = (dp[i - 1] * R) % MOD;
 }
 // console.log("dp: ", dp);
 
 let answer = 0;
 
-const MOD = 1234567891;
 for (const [index, value] of values.entries()) {
   const a = value.charCodeAt(0) - 96;
   answer += a * dp[index];
