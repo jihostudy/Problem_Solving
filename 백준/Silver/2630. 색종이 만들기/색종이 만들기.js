@@ -1,3 +1,10 @@
+/**
+ * 교훈
+ * 재귀 문제를 풀때, 배열만 인자로 넘기는게 아니라, 어떤 인자를 더 넘겨주면 훨씬 간단해지는지를 잘 생각해보기
+ *
+ * 해당 문제의 경우에는 (시작row, 끝나는row, 길이) 해당 3가지를 인자로 넘겨주면 재귀가 훨씬 간단해졌음.
+ */
+
 const fs = require("fs");
 const filePath =
   process.platform === "linux" ? "/dev/stdin" : "../../input.txt";
@@ -18,15 +25,16 @@ const inputs = fs.readFileSync(filePath, "utf-8").trim().split("\n");
 const N = Number(inputs[0]);
 const arr = inputs.slice(1, N + 1).map((array) => array.split(" ").map(Number));
 
+let [white, black] = [0, 0];
+
 // arr 2차원 배열이 같은 숫자로 이루어져 있는지 판단하는 함수
-const is_same_color = (array) => {
-  const length = array.length;
-  const first = array[0][0];
+const is_same_color = (row, col, length) => {
+  const first = arr[row][col];
 
   let isSame = true;
-  for (let i = 0; i < length; i++) {
-    for (let j = 0; j < length; j++) {
-      if (array[i][j] !== first) {
+  for (let i = row; i < row + length; i++) {
+    for (let j = col; j < col + length; j++) {
+      if (arr[i][j] !== first) {
         isSame = false;
         break;
       }
@@ -35,79 +43,30 @@ const is_same_color = (array) => {
   return isSame;
 };
 
-// arr 배열에 하얀색과 파란색 영역의 개수를 구하는 함수
-const find_color_parts = (array) => {
-  // console.log("array: ", array);
-
-  const length = array.length; // 너비
+/**
+ * row, col로 시작해서 크기가 length인 부분의 영역의 개수를 구하는 함수
+ */
+const find_color_parts = (row, col, length) => {
   const size = length ** 2; // 전체 개수
-  const middle = length / 2;
-
-  let [white, black] = [0, 0];
-
-  // 모두 다른 색 : 4개로 분할
-  if (!is_same_color(array)) {
-    // find_color_parts(array1)의 white, black 개수
-    let temp;
-    const array1 = [];
-    for (let row = 0; row < middle; row++) {
-      temp = [];
-      for (let col = 0; col < middle; col++) {
-        temp.push(array[row][col]);
-      }
-      array1.push(temp);
-    }
-    const [w1, b1] = find_color_parts(array1);
-
-    // find_color_parts(array2)의 white, black 개수
-    const array2 = [];
-    for (let row = 0; row < middle; row++) {
-      temp = [];
-      for (let col = middle; col < length; col++) {
-        temp.push(array[row][col]);
-      }
-      array2.push(temp);
-    }
-    const [w2, b2] = find_color_parts(array2);
-
-    // find_color_parts(array3)의 white, black 개수
-    const array3 = [];
-    for (let row = middle; row < length; row++) {
-      temp = [];
-      for (let col = 0; col < middle; col++) {
-        temp.push(array[row][col]);
-      }
-      array3.push(temp);
-    }
-    const [w3, b3] = find_color_parts(array3);
-
-    // find_color_parts(array4)의 white, black 개수
-    const array4 = [];
-    for (let row = middle; row < length; row++) {
-      temp = [];
-      for (let col = middle; col < length; col++) {
-        temp.push(array[row][col]);
-      }
-      array4.push(temp);
-    }
-    const [w4, b4] = find_color_parts(array4);
-
-    white += w1 + w2 + w3 + w4;
-    black += b1 + b2 + b3 + b4;
-  }
 
   // 모두 같은 색
-  else {
-    const value = array[0][0];
+  if (is_same_color(row, col, length)) {
+    const value = arr[row][col];
     if (value === 0) {
       white += 1;
     } else {
       black += 1;
     }
+    return;
   }
-  return [white, black];
+
+  const mid = length / 2;
+  find_color_parts(row, col, mid);
+  find_color_parts(row, col + mid, mid);
+  find_color_parts(row + mid, col, mid);
+  find_color_parts(row + mid, col + mid, mid);
 };
 
-const [answer_white, answer_black] = find_color_parts(arr);
-console.log(answer_white);
-console.log(answer_black);
+find_color_parts(0, 0, N);
+console.log(white);
+console.log(black);
