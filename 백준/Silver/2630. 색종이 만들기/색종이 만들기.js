@@ -109,4 +109,5 @@ const find_color_parts = (array) => {
 };
 
 const [answer_white, answer_black] = find_color_parts(arr);
-console.log(answer_white, answer_black);
+console.log(answer_white);
+console.log(answer_black);
