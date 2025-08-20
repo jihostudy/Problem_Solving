@@ -24,11 +24,17 @@ const solution = (init, target) => {
     }
 
     // 삽입
-    for (next of [value - 1, value + 1, value * 2]) {
-      if (!visited.has(next) && next >= 0 && next <= 100000) {
-        visited.add(next);
-        queue.push([next, time + 1]);
-      }
+    if (value + 1 <= 100000 && !visited.has(value + 1)) {
+      queue.push([value + 1, time + 1]);
+      visited.add(value + 1);
+    }
+    if (value * 2 <= 100000 && !visited.has(value * 2)) {
+      queue.push([value * 2, time + 1]);
+      visited.add(value * 2);
+    }
+    if (value - 1 >= 0 && !visited.has(value - 1)) {
+      queue.push([value - 1, time + 1]);
+      visited.add(value - 1);
     }
   }
 };
