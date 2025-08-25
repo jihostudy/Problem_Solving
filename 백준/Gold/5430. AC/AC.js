@@ -16,19 +16,24 @@ for (let i = 0; i < testcase; i++) {
   // console.log(N);
   // console.log(numbers);
 
+  let [left, right] = [0, N - 1];
   let face = "front"; // "front" | "end"
   let isError = false;
   for (const command of commands) {
+    // console.log("testing command: ", command);
+    // console.log("left,right ", left, right);
+
+    // 에러 반환
+    if (left > right) {
+      if (command === "R") continue;
+      isError = true;
+    }
     // 값 추출
-    if (command === "D") {
-      // 에러 반환
-      if (numbers.length === 0) {
-        isError = true;
-        break;
-      } else if (face === "front") {
-        numbers.shift();
+    else if (command === "D") {
+      if (face === "front") {
+        left += 1;
       } else if (face === "end") {
-        numbers.pop();
+        right -= 1;
       }
     }
     // 방향 바꾸기
@@ -40,15 +45,11 @@ for (let i = 0; i < testcase; i++) {
     answers.push("error");
     continue;
   }
-  if (face === "end") {
-    numbers.reverse();
-  }
-  // console.log("최종 numbers:", numbers);
+  const answer = numbers.slice(left, right + 1);
+  if (face === "end") answer.reverse();
+  answers.push(answer);
   // console.log();
-
-  answers.push(numbers);
 }
-// console.log("1️⃣정답 출력");
 
 for (const answer of answers) {
   if (answer === "error") console.log(answer);
