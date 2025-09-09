@@ -1,16 +1,15 @@
-# 브론즈1
 
-N, M = map(int, input().split())
+import math
 
-#최대 공약수
-minValue = min(N,M)
+n,m = map(int,input().split(" "))
 
-val = 1
-for i in range(1,minValue + 1):
-    if (N % i == 0) and (M % i == 0):
-        val = i
-        # print("{} is divided by {}".format(i, val))
-
-print(val)
-#최소 공배수
-print((N // val) * (M // val) * val)
+# 최대공약수
+max_divide = 1
+max_range = min(n,m)
+for i in range(2,max_range+1):
+  # 둘다 나눠지는 경우
+  if(n % i == 0 and m % i == 0):
+    max_divide = i
+print(max_divide)
+# 최소 공배수
+print((n // max_divide) * (m // max_divide) * max_divide)
