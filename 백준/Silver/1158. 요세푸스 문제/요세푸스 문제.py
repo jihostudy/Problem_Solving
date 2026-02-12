@@ -1,26 +1,10 @@
-#1158번
-N, K = map(int, input().split())
-arr = [i+1 for i in range(N)]
-ans = []
+n, k = map(int, input().split())
+people = list(range(1, n + 1)) #둥글게 모여앉은 사람들
+k_index = 0
+result = []
 
-arr_len = N # 보존 
-ti = 0 #target_index
-cnt = 0
-while(len(ans) < arr_len):        
-    cnt += 1                
-    if(cnt == K):
-        ans.append(arr[ti])            
-        arr.pop(ti)
-        N -= 1 #길이 1제거        
-        cnt = 0     
-    else:
-        ti = (ti + 1) % N        
+for i in range(n): #n번만 반복하면 되니까
+	k_index = (k_index + k - 1) % len(people)
+	result.append(people.pop(k_index))
     
-    
-print("<",end="")
-for i in range(arr_len):
-    if(i == arr_len-1):
-        print(ans[i], end="")
-    else:
-        print(str(ans[i]) + ", ",end="")
-print(">", end="")
+print('<' + str(result)[1:-1] + '>')
