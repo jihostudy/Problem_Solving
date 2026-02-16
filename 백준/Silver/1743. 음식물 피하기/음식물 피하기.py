@@ -1,52 +1,41 @@
 from collections import deque
+import sys
 
-def print_board(board):
-    for arr in board:
-        print(*arr)
+input = sys.stdin.readline
 
-dr = [0,1,0,-1]
-dc = [1,0,-1,0]
+n, m, k = map(int, input().strip().split())
+arr = [[0] * m for _ in range(n)]
 
-# M: 가로, N: 세로
-def BFS(board, row, col, visited, M, N):
-    queue = deque()
-
-    queue.append([row,col])
-    visited[row][col] = True
-
-    count = 0
-    while queue:
-        row, col = queue.popleft()
-        count += 1
-
-        for i in range(4):
-            nrow, ncol = row + dr[i], col + dc[i]
-            if(0 <= nrow < N and 0 <= ncol < M and visited[nrow][ncol] == False and board[nrow][ncol] == 1):
-                queue.append([nrow, ncol])
-                visited[nrow][ncol] = True
-    return count
+for _ in range(k):
+    r, c = map(int, input().strip().split())
+    arr[r - 1][c - 1] = 1
 
 
-# M: 가로(col), N: 세로(row), K: 음식물의 개수
-N, M, K = map(int, input().split())
+d = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-# 0 : 음식물 없음, 1: 음식물 있음
-board = [[0 for _ in range(M)] for _ in range(N)]
 
-for i in range(K):
-    row,col = map(int, input().split())
-    board[row-1][col-1] = 1
+def bfs(y, x):
+    q = deque()
+    q.append((y, x))
+    arr[y][x] = 0  # 쓰레기 치웠다는 의미 (=방문했다는 의미)
+    cnt = 0
+    while q:
+        y, x = q.popleft()
+        cnt += 1
+        for dy, dx in d:
+            Y, X = y + dy, x + dx
+            if (0 <= Y < n) and (0 <= X < m) and arr[Y][X] == 1:
+                arr[Y][X] = 0
+                q.append((Y, X))
 
-# print_board(board)
+    return cnt
 
-maxCount = -1
-visited = [[False for _ in range(M)] for _ in range(N)]
-for row in range(N):
-    for col in range(M):
-        if(visited[row][col] == False and board[row][col] == 1):
-            # print("starting from row: {},col :{}".format(row,col))
-            count = BFS(board, row, col, visited, M, N)
-            # print("count: {}".format(count))
-            maxCount = max(maxCount,count)
 
-print(maxCount)
+result = 1
+for y in range(n):
+    for x in range(m):
+        if arr[y][x] == 1:
+            # print(bfs(y, x))
+            result = max(result, bfs(y, x))
+
+print(result)
