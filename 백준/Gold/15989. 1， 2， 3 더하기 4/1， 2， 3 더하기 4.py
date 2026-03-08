@@ -1,22 +1,31 @@
-testcase = int(input())
+# https://www.acmicpc.net/problem/15989
+# 1, 2, 3 더하기 4, 골드5
 
-maxValue = -float('inf')
-testcases = []
-for _ in range(testcase):
-    value = int(input())
-    maxValue = max(maxValue, value)
-    testcases.append(value)
+import sys
+import copy
+from collections import deque, defaultdict
+from typing import List
 
-#1
-dp = [1] * (maxValue + 1)
+N = int(input())
+numbers = []
+for _ in range(N):
+  numbers.append(int(input()))
 
-#2
-for i in range(2, maxValue + 1):
-    dp[i] = dp[i-2] + dp[i]
+max_number = max(numbers)
+dp = [
+  [0,0,0],
+  [1,0,0],
+  [1,1,0],
+  [1,1,1],
+  ]
+for i in range(4,max_number + 1):
+  # print(f"tesitng index : {i}")
+  temp = []
+  temp.append(dp[i-1][0])
+  temp.append(dp[i-2][0] + dp[i-2][1])
+  temp.append(dp[i-3][0] + dp[i-3][1] + dp[i-3][2])
+  
+  dp.append(temp)
 
-#3
-for i in range(3, maxValue + 1):
-    dp[i] = dp[i-3] + dp[i]
-
-for test in testcases:
-    print(dp[test])
+for number in numbers:
+  print(sum(dp[number]))  
